@@ -1,4 +1,4 @@
-module Equality where
+module plfa.Equality where
     data _≡_ {A : Set} (x : A) : A -> Set where
         refl : x ≡ x
 
@@ -60,7 +60,6 @@ module Equality where
         begin
             x
             ≡⟨ x==y ⟩
-            -- Since y ≡⟨ y==z ⟩ z simply yields y==z, we can replace this term with y==z
             y
             ≡⟨ y==z ⟩
             z
@@ -194,16 +193,30 @@ module Equality where
     data odd  : ℕ → Set
 
     data even where
-
-    even-zero : even zero
-
-    even-suc : ∀ {n : ℕ}
-        → odd n
-        ------------
-        → even (suc n)
+        even-zero : even zero
+        even-suc : ∀ {n : ℕ}
+            → odd n
+            ------------
+            → even (suc n)
 
     data odd where
-    odd-suc : ∀ {n : ℕ}
-        → even n
-        -----------
-        → odd (suc n)
+        odd-suc : ∀ {n : ℕ}
+            → even n
+            -----------
+            → odd (suc n)
+
+    {-# BUILTIN EQUALITY _≡_ #-}
+
+    even-comm : ∀ (m n : ℕ) -> even (m + n) -> even (n + m)
+    even-comm m n ev rewrite +-comm m n = ev
+
+    _≐_ : ∀ {A : Set} (x y : A) -> Set₁
+    _≐_ {A} x y = ∀ (P : A -> Set) -> P x -> P y
+
+    refl-≐ : ∀ {A : Set} {x : A} → x ≐ x
+    refl-≐ P  px = px
+    --     P (P x) : corresponds to ∀ (P) -> P x -> P y
+
+
+
+
