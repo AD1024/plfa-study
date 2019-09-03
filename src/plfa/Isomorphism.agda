@@ -10,7 +10,7 @@ module plfa.Isomorphism where
     -- (f ∘ g) = λ {x -> f (g x)}
 
     postulate
-        extenionality : ∀ {A B : Set} {f g : A → B} 
+        extensionality : ∀ {A B : Set} {f g : A → B} 
                 -> (∀ (x : A) -> f x ≡ g x)
                 -> f ≡ g
     
@@ -26,7 +26,7 @@ module plfa.Isomorphism where
         helper m (suc n) = cong suc (helper m n)
 
     same : _+'_ ≡ _+_
-    same = extenionality (λ m -> extenionality (λ n -> same-app m n))
+    same = extensionality (λ m -> extensionality (λ n -> same-app m n))
 
     plusZero : ℕ -> ℕ
     plusZero n = n + 0
@@ -38,7 +38,7 @@ module plfa.Isomorphism where
     same-app₀ x rewrite +-comm x 0 = refl
 
     same₀ : id ≡ plusZero
-    same₀ = extenionality (λ x -> same-app₀ x) 
+    same₀ = extensionality (λ x -> same-app₀ x) 
 
     infix 0 _≃_
     record _≃_ (A B : Set) : Set where
@@ -48,7 +48,7 @@ module plfa.Isomorphism where
         from∘to : ∀ (x : A) -> from (to x) ≡ x
         to∘from : ∀ (y : B) -> to (from y) ≡ y
 
-    open _≃_
+    open _≃_ public
 
     ≃-refl : ∀ {A : Set} -> A ≃ A
     ≃-refl = record
@@ -120,7 +120,7 @@ module plfa.Isomorphism where
             → A ≃ A
         A ≃-∎ = ≃-refl
 
-    open ≃-Reasoning
+    open ≃-Reasoning public
 
     infix 0 _≲_
     record _≲_ (A B : Set) : Set where
@@ -128,7 +128,7 @@ module plfa.Isomorphism where
             to      : A → B
             from    : B → A
             from∘to : ∀ (x : A) → from (to x) ≡ x
-    open _≲_
+    open _≲_ public
 
     ≲-refl : ∀ {A : Set} -> A ≲ A
     ≲-refl = 
@@ -222,7 +222,7 @@ module plfa.Isomorphism where
         field
             to    : A → B
             from  : B → A
-    open _⇔_
+    open _⇔_ public
 
     ⇔-refl : ∀ {A : Set} -> A ⇔ A
     ⇔-refl = 
