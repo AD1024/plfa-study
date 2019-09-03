@@ -68,3 +68,78 @@ module plfa.Connectives where
     
     η-⊤ : ∀ (w : ⊤) → tt ≡ w
     η-⊤ tt = refl
+
+    data _⊎_ (A B : Set) : Set where
+        inj₁ :
+            A
+            -----
+            → A ⊎ B
+
+        inj₂ :
+            B
+            -----
+            → A ⊎ B
+
+    case-⊎ : ∀ {A B C : Set} -> (A -> C) -> (B -> C) -> A ⊎ B -> C
+    case-⊎ f g (inj₁ x) = f x
+    case-⊎ f g (inj₂ y) = g y
+
+    η-⊎ : ∀ {A B : Set} -> (w : A ⊎ B) -> case-⊎ inj₁ inj₂ w ≡ w
+    η-⊎ (inj₁ x) = refl
+    η-⊎ (inj₂ y) = refl
+
+    infix 1 _⊎_
+
+    ⊎-comm : ∀ {A B : Set} -> A ⊎ B ≃ B ⊎ A
+    ⊎-comm = 
+        record
+            {
+                to = λ{(inj₁ x) -> inj₂ x ; (inj₂ y) -> inj₁ y} ;
+                from = λ{(inj₁ x) -> inj₂ x ; (inj₂ y) -> inj₁ y} ;
+                from∘to = λ{
+                    (inj₁ x) -> refl ;
+                    (inj₂ y) -> refl
+                } ;
+                to∘from = λ{
+                    (inj₁ x) -> refl ;
+                    (inj₂ y) -> refl 
+                }
+            }
+    ⊎-assoc : ∀ {A B C : Set} -> (A ⊎ B) ⊎ C ≃ A ⊎ (B ⊎ C)
+    ⊎-assoc = 
+        record
+            {
+                to = λ{
+                    (inj₁ (inj₁ x)) -> inj₁ x ;
+                    (inj₁ (inj₂ y)) -> inj₂ (inj₁ y) ;
+                    (inj₂ z)        -> inj₂ (inj₂ z)
+                } ;
+                from = λ{
+                    (inj₁ x) -> inj₁ (inj₁ x) ;
+                    (inj₂ (inj₁ y)) -> inj₁ (inj₂ y) ;
+                    (inj₂ (inj₂ z)) -> inj₂ z
+                } ;
+                from∘to = λ{
+                    (inj₁ (inj₁ x)) -> refl ; 
+                    (inj₁ (inj₂ y)) -> refl ; 
+                    (inj₂ z) -> refl
+                } ;
+                to∘from = λ{
+                    (inj₁ x) -> refl ;
+                    (inj₂ (inj₁ y)) -> refl ;
+                    (inj₂ (inj₂ z)) -> refl
+                }
+            }
+
+    data ⊥ : Set where
+        -- no clauses!
+
+    ⊥-identity-l : ∀ {A : Set} -> ⊥ ⊎ A ≃ A
+    ⊥-identity-l = 
+        record {
+            to = λ{(inj₂ x) -> x} ;
+            from = λ{x -> inj₂ x} ;
+            from∘to = λ{(inj₂ x) -> refl} ;
+            to∘from = λ{x -> refl}
+        }
+    -- Similar proof of ⊥-identity-r ... skipped
