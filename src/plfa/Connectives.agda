@@ -142,4 +142,39 @@ module plfa.Connectives where
             from∘to = λ{(inj₂ x) -> refl} ;
             to∘from = λ{x -> refl}
         }
-    -- Similar proof of ⊥-identity-r ... skipped
+    -- Similar proof of ⊥-identity-r
+    ⊥-identity-r : ∀ {A : Set} -> A ⊎ ⊥ ≃ A
+    ⊥-identity-r = 
+        record
+            {
+                to = λ{(inj₁ x) -> x} ;
+                from = λ{x -> inj₁ x} ;
+                from∘to = λ{(inj₁ x) -> refl} ;
+                to∘from = λ{x -> refl}
+            }
+    
+    -- Implication is function
+    →-elim : ∀ {A B : Set} -> (A -> B) -> A -> B
+    →-elim f x = f x
+
+    η-→ : ∀ {A B : Set} -> (f : A -> B) -> (λ(x : A) -> f x) ≡ f
+    η-→ f = refl
+
+    currying : ∀ {A B C : Set} → (A → B → C) ≃ (A × B → C)
+    currying = 
+        record
+            {
+                to = λ{f -> λ{⟨ x , y ⟩ -> f x y}} ;
+                from = λ{g -> λ{x -> λ{y -> g ⟨ x , y ⟩}}} ;
+                from∘to = λ{f -> refl} ;
+                to∘from = λ{g -> extensionality (λ{⟨ x , y ⟩ -> refl})}
+            }
+    
+
+    ⊎-weak-× : ∀ {A B C : Set} → (A ⊎ B) × C → A ⊎ (B × C)
+    ⊎-weak-× ⟨ inj₁ x , z ⟩ = inj₁ x
+    ⊎-weak-× ⟨ inj₂ y , z ⟩ = inj₂ ⟨ y , z ⟩
+
+    ⊎×-implies-×⊎ : ∀ {A B C D : Set} → (A × B) ⊎ (C × D) → (A ⊎ C) × (B ⊎ D)
+    ⊎×-implies-×⊎ (inj₁ ⟨ x , y ⟩) = ⟨ inj₁ x , inj₁ y ⟩
+    ⊎×-implies-×⊎ (inj₂ ⟨ z , w ⟩) = ⟨ inj₂ z , inj₂ w ⟩
