@@ -1,4 +1,4 @@
-module Learn where
+module plfa.part1.Naturals_Relations where
   open import Agda.Builtin.Equality
   open import Agda.Builtin.List
   open import Agda.Builtin.Bool
