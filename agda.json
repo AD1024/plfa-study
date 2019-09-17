@@ -1,0 +1,182 @@
+{
+	// Place your snippets for agda here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"simeq": {
+		"prefix": "simeq",
+		"body": "≈",
+		"description": "≈",
+	},
+	"leibeq": {
+		"prefix": "leibeq",
+		"body": "≐",
+		"description": "≐",
+	},
+	"isoeq" : {
+		"prefix" : "isoeq",
+		"body" : "≃",
+		"description": "≃"
+	},
+	"colonapprox" : {
+		"prefix": "colonapprox",
+		"body": "∻",
+		"description": "∻"
+	},
+	"singapprox" : {
+		"prefix": "singapprox",
+		"body": "∼",
+		"description": "∼"
+	},
+	"singnotapprox" : {
+		"prefix": "singnotapprox",
+		"body": "≁",
+		"description": "≁"
+	},
+	"approxeq" : {
+		"prefix": "approxeq",
+		"body": "≅",
+		"description": "≅"
+	},
+	"approxneq" : {
+		"prefix": "approxneq",
+		"body": "≇",
+		"description": "≇"
+	},
+	"defeq" : {
+		"prefix": "defeq",
+		"body": "≝",
+		"description": "≝"
+	},
+	"stareq" : {
+		"prefix": "stareq",
+		"body": "≛",
+		"description": "≛"
+	},
+	"andeq" : {
+		"prefix": "andeq",
+		"body": "≙",
+		"description": "≙"
+	},
+	"oreq" : {
+		"prefix": "oreq",
+		"body": "≚",
+		"description": "≚"
+	},
+	"ngeq" : {
+		"prefix": "ngeq",
+		"description": "≱",
+		"body": "≱"
+	},
+	"nleq" : {
+		"prefix": "nleq",
+		"body": "≰",
+		"description": "≰"
+	},
+	"nle" : {
+		"prefix": "nle",
+		"body": "≮",
+		"description": "≮",
+	},
+	"nge" : {
+		"prefix": "nge",
+		"body": "≯"
+	},
+	"leapprox" : {
+		"prefix": "leapprox",
+		"body": "≲"
+	},
+	"geapprox" : {
+		"prefix": "geapprox",
+		"body": "≳"
+	},
+	"lenapprox" : {
+		"prefix": "lenapprox",
+		"body": "⋦"
+	},
+	"genapprox" : {
+		"prefix": "genapprox",
+		"body": "⋧"
+	},
+	"nleapprox": {
+		"prefix": "nleapprox",
+		"body": "≴"
+	},
+	"ngeapprox": {
+		"prefix": "ngeapprox",
+		"body": "≵"
+	},
+	"sup" : {
+		"prefix": "sup",
+		"body": "⊃"
+	},
+	"subn" : {
+		"prefix": "subn",
+		"body": "⊄"
+	},
+	"supn" : {
+		"prefix": "supn",
+		"body": "⊅"
+	},
+	"supeq" : {
+		"prefix": "supeq",
+		"body": "⊇"
+	},
+	"subneq" : {
+		"prefix": "subneq",
+		"body": "⊈"
+	},
+	"supneq" : {
+		"prefix": "supneq",
+		"body": "⊉"
+	},
+	"intersec" : {
+		"prefix": "intersec",
+		"body": "∩"
+	},
+	"union" : {
+		"prefix": "union",
+		"body": "∪"
+	},
+	"and" : {
+		"prefix": "and",
+		"body": "∧"
+	},
+	"or" : {
+		"prefix": "or",
+		"body": "∨"
+	},
+	"|-" : {
+		"prefix": "turnsile",
+		"body": "⊢"
+	},
+	"|-/" : {
+		"prefix": "nturnsile",
+		"body": "⊬"
+	},
+	"iff" : {
+		"prefix": "iff",
+		"body": "⇔"
+	},
+	"unionplus" : {
+		"prefix": "unionplus",
+		"body": "⊎"
+	},
+	"False" : {
+		"prefix": "False",
+		"body": "⊥"
+	},
+	"to" : {
+		"prefix": "to",
+		"body": "→"
+	}
+}

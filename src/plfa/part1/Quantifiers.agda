@@ -31,4 +31,8 @@ module plfa.part1.Quantifiers where
     ⊎∀-implies-∀⊎ (inj₁ A→Bx) = λ x → inj₁ (A→Bx x)
     ⊎∀-implies-∀⊎ (inj₂ A→Cx) = λ x → inj₂ (A→Cx x)
 
-    
+    eta-to : {A : Set}{B C : A → Set}{x : A}{f : A → B x × C x} → f ≡ (λ x → ⟨ (proj₁ ∘ f) x , (proj₂ ∘ f) x ⟩)
+    eta-to = refl
+
+    eta-times : {A B : Set}{w : A × B} → w ≡ ⟨ proj₁ w , proj₂ w ⟩
+    eta-times = refl
