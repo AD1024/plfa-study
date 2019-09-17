@@ -4,8 +4,8 @@ module plfa.part1.Connectives where
     open Eq.≡-Reasoning
     open import Data.Nat using (ℕ)
     open import Function using (_∘_)
-    open import plfa.Isomorphism using (_≃_; _≲_; extensionality; _⇔_)
-    open plfa.Isomorphism.≃-Reasoning
+    open import plfa.part1.Isomorphism using (_≃_; _≲_; extensionality; _⇔_)
+    open plfa.part1.Isomorphism.≃-Reasoning
     open _⇔_
 
     data _×_ (A B : Set) : Set where
