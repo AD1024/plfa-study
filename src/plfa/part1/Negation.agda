@@ -5,7 +5,6 @@ module plfa.part1.Negation where
     open import Data.Sum using (_⊎_; inj₁; inj₂)
     open import plfa.part1.Connectives using (_×_; ⟨_,_⟩)
     open import Function using (_∘_)
-    open import Function using (_∘_)
     open import plfa.part1.Isomorphism using (_≃_; extensionality)
     open import Relation.Binary.PropositionalEquality using (cong)
     open import plfa.part1.Naturals_Relations using (_<_; s<s; z<s)
