@@ -7,3 +7,8 @@ module plfa.part1.Relations where
     data _<_ : ℕ → ℕ → Set where
         z<s : ∀ {n : ℕ} → zero < suc n
         s<s : ∀ {m n : ℕ} → m < n → suc m < suc n
+
+    infix 4 _≤_
+    data _≤_ : ℕ → ℕ → Set where
+        z≤s : ∀ {n : ℕ} → zero ≤ n
+        s≤s : ∀ {m n : ℕ} → m ≤ n → suc m ≤ suc n
