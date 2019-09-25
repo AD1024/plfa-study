@@ -7,6 +7,7 @@ module plfa.part1.Lists where
     open import Data.Nat.Properties using (+-assoc; +-identityˡ; +-identityʳ; *-assoc; *-identityˡ; *-identityʳ)
     open import Relation.Nullary using (¬_; Dec; yes; no)
     open import Data.Product using (_×_; ∃; ∃-syntax) renaming (_,_ to ⟨_,_⟩)
+    open import Data.Sum using (_⊎_; inj₁; inj₂)
     open import Function using (_∘_)
     open import Level using (Level)
     open import plfa.part1.Isomorphism using (_≃_; _⇔_)
@@ -379,4 +380,170 @@ module plfa.part1.Lists where
             ≡⟨⟩
             foldr _⊗_ e (x ∷ xs) ⊗ y
         ∎
-        
+
+    foldr-monoid-++ : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e 
+                            → ∀ (xs ys : List A) → foldr _⊗_ e (xs ++ ys) ≡ foldr _⊗_ e xs ⊗ foldr _⊗_ e ys
+    foldr-monoid-++ _⊗_ e monoid xs ys = 
+        begin
+            foldr _⊗_ e (xs ++ ys)
+            ≡⟨ foldr-++ _⊗_ e xs ys ⟩
+            foldr _⊗_ (foldr _⊗_ e ys) xs
+            ≡⟨ foldr-monoid _⊗_ e monoid xs (foldr _⊗_ e ys) ⟩
+            foldr _⊗_ e xs ⊗ foldr _⊗_ e ys
+        ∎
+    
+    foldl : {A : Set} → (_⊗_ : A → A → A) → (e : A) → (xs : List A) → A
+    foldl _ e [] = e
+    foldl _⊗_ e (x ∷ xs) = foldl _⊗_ (e ⊗ x) xs
+
+    -- Practice foldr-monoid-foldl
+    foldl-monoid-lem : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (x : A) 
+                                    → foldl _⊗_ (e ⊗ x) xs ≡ foldl _⊗_ x xs
+    foldl-monoid-lem _ _ monoid-⊗ xs y rewrite identityˡ monoid-⊗ y = refl
+
+    foldl-monoid : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (y : A) 
+                                    → y ⊗ foldl _⊗_ e xs ≡ foldl _⊗_ y xs 
+    foldl-monoid _⊗_ e monoid-⊗ [] y = 
+        begin
+            y ⊗ e
+            ≡⟨ identityʳ monoid-⊗ y ⟩
+            y
+        ∎
+    foldl-monoid _⊗_ e monoid-⊗ (x ∷ xs) y =
+        begin
+            y ⊗ foldl _⊗_ e (x ∷ xs)
+            ≡⟨⟩
+            y ⊗ foldl _⊗_ (e ⊗ x) xs
+            ≡⟨ cong (y ⊗_) (foldl-monoid-lem _⊗_ e monoid-⊗ xs x) ⟩
+            y ⊗ foldl _⊗_ x xs
+            ≡⟨ sym (cong (y ⊗_) (foldl-monoid _⊗_ e monoid-⊗ xs x)) ⟩
+            y ⊗ (x ⊗ foldl _⊗_ e xs)
+            ≡⟨ sym (assoc monoid-⊗ y x (foldl _⊗_ e xs)) ⟩
+            (y ⊗ x) ⊗ foldl _⊗_ e xs
+            ≡⟨ foldl-monoid _⊗_ e monoid-⊗ xs (y ⊗ x) ⟩
+            foldl _⊗_ (y ⊗ x) xs
+            ≡⟨⟩
+            foldl _⊗_ y (x ∷ xs)
+        ∎
+
+    foldr-monoid-foldl-lem : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (y : A)
+                                    → foldl _⊗_ y xs ≡ foldl _⊗_ (e ⊗ y) xs
+    foldr-monoid-foldl-lem _⊗_ e monoid-⊗ xs y rewrite identityˡ monoid-⊗ y = refl
+
+    foldr-monoid-foldl-lem₁  : ∀ {A : Set} (_⊗_ : A → A → A) (e : A)
+                            → IsMonoid _⊗_ e → (xs : List A) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
+    foldr-monoid-foldl-lem₁ _ _  monoid-⊗ [] = refl
+    foldr-monoid-foldl-lem₁ _⊗_ e monoid-⊗ (x ∷ xs) = 
+        begin
+            foldr _⊗_ e (x ∷ xs)
+            ≡⟨⟩
+            x ⊗ (foldr _⊗_ e xs)
+            ≡⟨ cong (x ⊗_) (foldr-monoid-foldl-lem₁ _⊗_ e monoid-⊗ xs) ⟩
+            x ⊗ foldl _⊗_ e xs
+            ≡⟨ foldl-monoid _⊗_ e monoid-⊗ xs x ⟩
+            foldl _⊗_ x xs
+            ≡⟨ foldr-monoid-foldl-lem _⊗_ e monoid-⊗ xs x ⟩
+            foldl _⊗_ (e ⊗ x) xs
+            ≡⟨⟩
+            foldl _⊗_ e (x ∷ xs)
+        ∎
+    foldr-monoid-foldl-lem₂   : ∀ {A : Set} (_⊗_ : A → A → A) (e : A)
+                            → IsMonoid _⊗_ e → (xs : List A) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
+    foldr-monoid-foldl-lem₂ _ _  monoid-⊗ [] = refl
+    foldr-monoid-foldl-lem₂ _⊗_ e monoid-⊗ (x ∷ xs) rewrite 
+                          foldr-monoid-foldl-lem₁ _⊗_ e monoid-⊗ xs
+                        | foldl-monoid _⊗_ e monoid-⊗ xs x
+                        | identityˡ monoid-⊗ x = refl
+
+    foldr-monoid-foldl : ∀ {A : Set} (_⊗_ : A → A → A) (e : A)
+                            → IsMonoid _⊗_ e → (xs : List A) → foldr _⊗_ e ≡ foldl _⊗_ e
+    foldr-monoid-foldl f e monoid-⊗ _ = plfa.part1.Isomorphism.extensionality(λ lst → foldr-monoid-foldl-lem₁ f e monoid-⊗ lst)
+
+    -- All
+    data All {A : Set} (P : A → Set) : List A → Set where
+        []  : All P []
+        _∷_ : ∀ {x : A} {xs : List A} → P x → All P xs → All P (x ∷ xs)
+
+    -- Any
+    data Any {A : Set} (P : A → Set) : List A → Set where
+        here  : ∀ {x : A} {xs : List A} → P x → Any P (x ∷ xs)
+        there : ∀ {x : A} {xs : List A} → Any P xs → Any P (x ∷ xs)
+
+    infix 4 _∈_ _∉_
+
+    _∈_ : ∀ {A : Set} (x : A) (xs : List A) → Set
+    x ∈ xs = Any (x ≡_) xs
+
+    _∉_ : ∀ {A : Set} (x : A) (xs : List A) → Set
+    x ∉ xs = ¬ (x ∈ xs)
+
+    All-++-⇔ : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                                    → All P (xs ++ ys) ⇔ (All P xs × All P ys)
+    All-++-⇔ xs ys = 
+        record
+        {
+            to = to xs ys ;
+            from = from xs ys
+        } where
+            to : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                                    → All P (xs ++ ys) → (All P xs × All P ys)
+            to [] ys all = ⟨ [] , all ⟩
+            to (x ∷ xs) ys (ps ∷ all) with (to xs ys all)
+            ... | ⟨ all-xs , all-ys ⟩ = ⟨ ps ∷ all-xs , all-ys ⟩
+
+            from : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (All P xs × All P ys) → All P (xs ++ ys)
+            from [] ys ⟨ [] , all-ys ⟩ = all-ys
+            from (x ∷ xs) ys ⟨ px ∷ all-xs , all-ys ⟩ = px ∷ (from xs ys ⟨ all-xs , all-ys ⟩)
+
+    -- Exercise Any-++-⇔
+    Any-++-⇔ : ∀ {A : Set} {P : A → Set} (xs ys : List A) → Any P (xs ++ ys) ⇔ ((Any P xs) ⊎ (Any P ys))
+    Any-++-⇔ xs ys = 
+        record
+            {
+                to = to-lem xs ys ;
+                from = from-lem xs ys
+            } where
+                to-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                    → Any P (xs ++ ys) →  (Any P xs) ⊎ (Any P ys)
+                to-lem [] ys any-ys = inj₂ any-ys
+                to-lem (x ∷ xs) _ (here px) = inj₁ (here px)
+                to-lem (x ∷ xs) ys (there in-xs++ys) with to-lem xs ys in-xs++ys
+                ... | inj₁ in-xs = inj₁ (there in-xs)
+                ... | inj₂ in-ys = inj₂ in-ys
+                
+                from-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                    → (Any P xs) ⊎ (Any P ys) → Any P (xs ++ ys)
+                from-lem _ _ (inj₁ (here px))              = here px
+                from-lem [] ys (inj₂ in-ys)                = in-ys
+                from-lem (x ∷ xs) ys (inj₁ (there in-xs)) = there (from-lem xs ys (inj₁ in-xs))
+                from-lem (x ∷ xs) ys (inj₂ in-ys)         = there (from-lem xs ys (inj₂ in-ys))
+    
+    -- Exercise All-++-≃
+    All-++-≃ : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                                    → All P (xs ++ ys) ≃ (All P xs × All P ys)
+    All-++-≃ xs ys = 
+        record
+        {
+            to = to xs ys ;
+            from = from xs ys ;
+            from∘to = from-to-lem xs ys ;
+            to∘from = to-from-lem xs ys
+        } where
+            to : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                                    → All P (xs ++ ys) → (All P xs × All P ys)
+            to [] ys all = ⟨ [] , all ⟩
+            to (x ∷ xs) ys (ps ∷ all) with (to xs ys all)
+            ... | ⟨ all-xs , all-ys ⟩ = ⟨ ps ∷ all-xs , all-ys ⟩
+
+            from : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (All P xs × All P ys) → All P (xs ++ ys)
+            from [] ys ⟨ [] , all-ys ⟩ = all-ys
+            from (x ∷ xs) ys ⟨ px ∷ all-xs , all-ys ⟩ = px ∷ (from xs ys ⟨ all-xs , all-ys ⟩)
+            from-to-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (ev : All P (xs ++ ys)) 
+                            → from xs ys (to xs ys ev) ≡ ev
+            from-to-lem [] ys in-ys = refl
+            from-to-lem (x ∷ xs) ys (px ∷ all) rewrite from-to-lem xs ys all = refl
+
+            to-from-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (ev : All P xs × All P ys) 
+                            → to xs ys (from xs ys ev) ≡ ev
+            to-from-lem [] ys ⟨ [] , all-ys ⟩ = refl
+            to-from-lem (x ∷ xs) ys ⟨ px ∷ all-xs , all-ys ⟩ rewrite to-from-lem xs ys ⟨ all-xs , all-ys ⟩ = refl
