@@ -10,6 +10,7 @@ module plfa.part1.Lists where
     open import Data.Sum using (_⊎_; inj₁; inj₂)
     open import Function using (_∘_)
     open import Level using (Level)
+    open import Data.Empty
     open import plfa.part1.Isomorphism using (_≃_; _⇔_)
 
     data List (A : Set) : Set where
@@ -547,3 +548,37 @@ module plfa.part1.Lists where
                             → to xs ys (from xs ys ev) ≡ ev
             to-from-lem [] ys ⟨ [] , all-ys ⟩ = refl
             to-from-lem (x ∷ xs) ys ⟨ px ∷ all-xs , all-ys ⟩ rewrite to-from-lem xs ys ⟨ all-xs , all-ys ⟩ = refl
+    
+
+    -- Stretch ¬Any≃All¬
+    _∘′_ : ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂} {C : Set ℓ₃}
+                                    → (B → C) → (A → B) → A → C
+    (g ∘′ f) x  =  g (f x)
+
+    ¬Any≃All¬ : ∀ {A : Set} (P : A → Set) (xs : List A) → (¬_ ∘′ Any P) xs ≃ All (¬_ ∘′ P) xs
+
+    
+    ¬Any≃All¬ P xs = 
+        record
+        {
+            to = to-lem P xs ;
+            from = from-lem P xs ;
+            from∘to = from-to-lem P xs ;
+            to∘from = to-from-lem P xs
+        } where
+            to-lem : ∀ {A : Set} (P : A → Set) (xs : List A) → (¬_ ∘′ Any P) xs → All (¬_ ∘′ P) xs
+            to-lem P [] _ = []
+            to-lem P (x ∷ xs) not-any = (λ x -> not-any (here x)) ∷ (to-lem P xs (λ any -> not-any (there any)))
+
+            from-lem : ∀ {A : Set} (P : A → Set) (xs : List A) → All (¬_ ∘′ P) xs → (¬_ ∘′ Any P) xs
+            from-lem P [] _ ()
+            from-lem P (x ∷ xs) (¬px ∷ ¬all-xs) = λ {(here px) -> ¬px px ; (there any-xs) -> from-lem P xs ¬all-xs any-xs}
+
+            from-to-lem : ∀ {A : Set} (P : A → Set) (xs : List A) → (x : (¬_ ∘′ Any P) xs) → from-lem P xs (to-lem P xs x) ≡ x
+            from-to-lem P [] ¬empty = plfa.part1.Isomorphism.extensionality λ ()
+            from-to-lem P (x ∷ xs) ¬any = plfa.part1.Isomorphism.extensionality (λ {(here px) → refl ; (there any-xs) → ⊥-elim (¬any (there any-xs))} )
+
+            to-from-lem : ∀ {A : Set} (P : A → Set) (xs : List A) → (x : All (¬_ ∘′ P) xs) → to-lem P xs (from-lem P xs x) ≡ x
+            to-from-lem P [] [] = refl
+            to-from-lem P (x ∷ xs) (¬px ∷ ¬all-xs) = cong (¬px ∷_) (to-from-lem P xs ¬all-xs)
+                    
