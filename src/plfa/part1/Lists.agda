@@ -25,7 +25,7 @@ module plfa.part1.Lists where
     pattern [_,_,_] x y z = x ∷ y ∷ z ∷ []
     pattern [_,_,_,_] w x y z = w ∷ x ∷ y ∷ z ∷ []
     pattern [_,_,_,_,_] v w x y z = v ∷ w ∷ x ∷ y ∷ z ∷ []
-    pattern [_,_,_,_,_,_] u v w x y z = u ∷ v ∷ w ∷ x ∷ y ∷ z ∷ []    
+    pattern [_,_,_,_,_,_] u v w x y z = u ∷ v ∷ w ∷ x ∷ y ∷ z ∷ []
 
     infixr 5 _++_
 
@@ -36,7 +36,7 @@ module plfa.part1.Lists where
     -- List Reasoning
     ++-assoc : ∀ {A : Set} (xs ys zs : List A)
                         → (xs ++ ys) ++ zs ≡ xs ++ (ys ++ zs)
-    ++-assoc [] ys zs = 
+    ++-assoc [] ys zs =
         begin
             ([] ++ ys) ++ zs
             ≡⟨⟩
@@ -44,8 +44,8 @@ module plfa.part1.Lists where
             ≡⟨⟩
             [] ++ (ys ++ zs)
         ∎
-    
-    ++-assoc (x ∷ xs) ys zs = 
+
+    ++-assoc (x ∷ xs) ys zs =
         begin
             (x ∷ xs ++ ys) ++ zs
             ≡⟨⟩
@@ -61,7 +61,7 @@ module plfa.part1.Lists where
 
     ++-identityʳ : ∀ {A : Set} (xs : List A) → xs ++ [] ≡ xs
     ++-identityʳ [] = refl
-    ++-identityʳ (x ∷ xs) = 
+    ++-identityʳ (x ∷ xs) =
         begin
             x ∷ xs ++ []
             ≡⟨⟩
@@ -78,7 +78,7 @@ module plfa.part1.Lists where
     length-++ : ∀ {A : Set} (xs ys : List A)
                             → length (xs ++ ys) ≡ length xs + length ys
     length-++ [] ys = refl
-    length-++ (x ∷ xs) ys = 
+    length-++ (x ∷ xs) ys =
         begin
             length (x ∷ xs ++ ys)
             ≡⟨⟩
@@ -90,7 +90,7 @@ module plfa.part1.Lists where
             ≡⟨⟩
             length (x ∷ xs) + length (ys)
         ∎
-    
+
     -- Reverse
     reverse : ∀ {A : Set} → List A → List A
     reverse []        =  []
@@ -126,7 +126,7 @@ module plfa.part1.Lists where
             ≡⟨⟩
             reverse ys ++ reverse []
         ∎
-    reverse-++-distrib (x ∷ xs) ys = 
+    reverse-++-distrib (x ∷ xs) ys =
         begin
             reverse (x ∷ xs ++ ys)
             ≡⟨⟩
@@ -153,7 +153,7 @@ module plfa.part1.Lists where
             ≡⟨⟩
             reverse ys ++ reverse []
         ∎
-    reverse-++-commute {xs = x ∷ xs}{ys = ys} = 
+    reverse-++-commute {xs = x ∷ xs}{ys = ys} =
         begin
             reverse (x ∷ xs ++ ys)
             ≡⟨⟩
@@ -170,7 +170,7 @@ module plfa.part1.Lists where
 
     reverse-involutive : ∀ {A : Set} {xs : List A} → reverse (reverse xs) ≡ xs
     reverse-involutive {xs = []} = refl
-    reverse-involutive {xs = x ∷ xs} = 
+    reverse-involutive {xs = x ∷ xs} =
         begin
             reverse (reverse (x ∷ xs))
             ≡⟨⟩
@@ -184,7 +184,7 @@ module plfa.part1.Lists where
             ≡⟨⟩
             x ∷ xs
         ∎
-    
+
     -- Fast reverse
     shunt : ∀ {A : Set} → List A → List A → List A
     shunt []       ys  =  ys
@@ -206,7 +206,7 @@ module plfa.part1.Lists where
             ≡⟨⟩
             reverse (x ∷ xs) ++ ys
         ∎
-    
+
     reverse′ : ∀ {A : Set} → List A → List A
     reverse′ xs = shunt xs []
 
@@ -221,7 +221,7 @@ module plfa.part1.Lists where
             ≡⟨ ++-identityʳ (reverse xs) ⟩
                 reverse xs
         ∎
-    
+
     -- Map
     map : ∀ {A B : Set} → (A → B) → List A → List B
     map f []        =  []
@@ -233,7 +233,7 @@ module plfa.part1.Lists where
     -- Practice map-compose
     map-comp-lem : {A B C : Set}{f : A → B}{g : B → C} → ∀ (xs : List A) → map (g ∘ f) xs ≡ (map g ∘ map f) xs
     map-comp-lem [] = refl
-    map-comp-lem {f = f}{g = g}(x ∷ xs) = 
+    map-comp-lem {f = f}{g = g}(x ∷ xs) =
         begin
             map (g ∘ f) (x ∷ xs)
             ≡⟨⟩
@@ -250,7 +250,7 @@ module plfa.part1.Lists where
     -- Exercise map-++-commute
     map-++-commute : ∀ {A B : Set} {f : A → B} {xs ys : List A} → map f (xs ++ ys) ≡ map f xs ++ map f ys
     map-++-commute {xs = []}{ys = ys} = refl
-    map-++-commute {f = f}{xs = x ∷ xs}{ys = ys} = 
+    map-++-commute {f = f}{xs = x ∷ xs}{ys = ys} =
         begin
             map f (x ∷ xs ++ ys)
             ≡⟨⟩
@@ -260,12 +260,12 @@ module plfa.part1.Lists where
             ≡⟨⟩
             map f (x ∷ xs) ++ map f ys
         ∎
-    
+
     -- Practice map-tree
     data Tree (A B : Set) : Set where
         leaf : A → Tree A B
         node : Tree A B → B → Tree A B → Tree A B
-    
+
     map-Tree : ∀ {A B C D : Set} → (A → C) → (B → D) → Tree A B → Tree C D
     map-Tree f g (leaf x) = leaf (f x)
     map-Tree f g (node t1 v t2) = node (map-Tree f g t1) (g v) (map-Tree f g t2)
@@ -284,10 +284,10 @@ module plfa.part1.Lists where
     test-prod₀ : product [ 1 , 2 , 3 , 4 ] ≡ 24
     test-prod₀ = refl
 
-    foldr-++ : ∀ {A B : Set} (_⊗_ : A → B → B) (e : B) (xs ys : List A) 
+    foldr-++ : ∀ {A B : Set} (_⊗_ : A → B → B) (e : B) (xs ys : List A)
                             → foldr _⊗_ e (xs ++ ys) ≡ foldr _⊗_ (foldr _⊗_ e ys) xs
     foldr-++ _ _ [] ys = refl
-    foldr-++ _⊗_ e (x ∷ xs) ys = 
+    foldr-++ _⊗_ e (x ∷ xs) ys =
         begin
             foldr _⊗_ e ((x ∷ xs) ++ ys)
             ≡⟨⟩
@@ -299,11 +299,11 @@ module plfa.part1.Lists where
             ≡⟨⟩
             foldr _⊗_ (foldr _⊗_ e ys) (x ∷ xs)
         ∎
-    
+
 
     mif-lem : {A B : Set}{f : A → B} → ∀ (xs : List A) → map f xs ≡ foldr (λ x xs → f x ∷ xs) [] xs
     mif-lem [] = refl
-    mif-lem {f = f}(x ∷ xs) = 
+    mif-lem {f = f}(x ∷ xs) =
         begin
             map f (x ∷ xs)
             ≡⟨⟩
@@ -315,7 +315,7 @@ module plfa.part1.Lists where
         ∎
 
 
-    map-is-foldr : ∀ {A B : Set} {f : A → B} 
+    map-is-foldr : ∀ {A B : Set} {f : A → B}
                                 → map f ≡ foldr (λ x xs → f x ∷ xs) []
     map-is-foldr = plfa.part1.Isomorphism.extensionality (mif-lem)
 
@@ -344,8 +344,8 @@ module plfa.part1.Lists where
     +-monoid : IsMonoid _+_ 0
     +-monoid =
         record
-            { 
-                assoc = +-assoc ; 
+            {
+                assoc = +-assoc ;
                 identityˡ = +-identityˡ ;
                 identityʳ = +-identityʳ
             }
@@ -365,11 +365,11 @@ module plfa.part1.Lists where
             ; identityˡ = ++-identityˡ
             ; identityʳ = ++-identityʳ
             }
-    
+
     foldr-monoid : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e →
                                 ∀ (xs : List A) (y : A) → foldr _⊗_ y xs ≡ foldr _⊗_ e xs ⊗ y
     foldr-monoid _⊗_ e monoid [] y = sym (identityˡ monoid y)
-    foldr-monoid _⊗_ e monoid (x ∷ xs) y = 
+    foldr-monoid _⊗_ e monoid (x ∷ xs) y =
         begin
             foldr _⊗_ y (x ∷ xs)
             ≡⟨⟩
@@ -382,9 +382,9 @@ module plfa.part1.Lists where
             foldr _⊗_ e (x ∷ xs) ⊗ y
         ∎
 
-    foldr-monoid-++ : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e 
+    foldr-monoid-++ : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e
                             → ∀ (xs ys : List A) → foldr _⊗_ e (xs ++ ys) ≡ foldr _⊗_ e xs ⊗ foldr _⊗_ e ys
-    foldr-monoid-++ _⊗_ e monoid xs ys = 
+    foldr-monoid-++ _⊗_ e monoid xs ys =
         begin
             foldr _⊗_ e (xs ++ ys)
             ≡⟨ foldr-++ _⊗_ e xs ys ⟩
@@ -392,19 +392,19 @@ module plfa.part1.Lists where
             ≡⟨ foldr-monoid _⊗_ e monoid xs (foldr _⊗_ e ys) ⟩
             foldr _⊗_ e xs ⊗ foldr _⊗_ e ys
         ∎
-    
+
     foldl : {A : Set} → (_⊗_ : A → A → A) → (e : A) → (xs : List A) → A
     foldl _ e [] = e
     foldl _⊗_ e (x ∷ xs) = foldl _⊗_ (e ⊗ x) xs
 
     -- Practice foldr-monoid-foldl
-    foldl-monoid-lem : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (x : A) 
+    foldl-monoid-lem : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (x : A)
                                     → foldl _⊗_ (e ⊗ x) xs ≡ foldl _⊗_ x xs
     foldl-monoid-lem _ _ monoid-⊗ xs y rewrite identityˡ monoid-⊗ y = refl
 
-    foldl-monoid : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (y : A) 
-                                    → y ⊗ foldl _⊗_ e xs ≡ foldl _⊗_ y xs 
-    foldl-monoid _⊗_ e monoid-⊗ [] y = 
+    foldl-monoid : ∀ {A : Set} (_⊗_ : A → A → A) (e : A) → IsMonoid _⊗_ e → (xs : List A) → (y : A)
+                                    → y ⊗ foldl _⊗_ e xs ≡ foldl _⊗_ y xs
+    foldl-monoid _⊗_ e monoid-⊗ [] y =
         begin
             y ⊗ e
             ≡⟨ identityʳ monoid-⊗ y ⟩
@@ -434,7 +434,7 @@ module plfa.part1.Lists where
     foldr-monoid-foldl-lem₁  : ∀ {A : Set} (_⊗_ : A → A → A) (e : A)
                             → IsMonoid _⊗_ e → (xs : List A) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
     foldr-monoid-foldl-lem₁ _ _  monoid-⊗ [] = refl
-    foldr-monoid-foldl-lem₁ _⊗_ e monoid-⊗ (x ∷ xs) = 
+    foldr-monoid-foldl-lem₁ _⊗_ e monoid-⊗ (x ∷ xs) =
         begin
             foldr _⊗_ e (x ∷ xs)
             ≡⟨⟩
@@ -451,7 +451,7 @@ module plfa.part1.Lists where
     foldr-monoid-foldl-lem₂   : ∀ {A : Set} (_⊗_ : A → A → A) (e : A)
                             → IsMonoid _⊗_ e → (xs : List A) → foldr _⊗_ e xs ≡ foldl _⊗_ e xs
     foldr-monoid-foldl-lem₂ _ _  monoid-⊗ [] = refl
-    foldr-monoid-foldl-lem₂ _⊗_ e monoid-⊗ (x ∷ xs) rewrite 
+    foldr-monoid-foldl-lem₂ _⊗_ e monoid-⊗ (x ∷ xs) rewrite
                           foldr-monoid-foldl-lem₁ _⊗_ e monoid-⊗ xs
                         | foldl-monoid _⊗_ e monoid-⊗ xs x
                         | identityˡ monoid-⊗ x = refl
@@ -478,15 +478,18 @@ module plfa.part1.Lists where
     _∉_ : ∀ {A : Set} (x : A) (xs : List A) → Set
     x ∉ xs = ¬ (x ∈ xs)
 
-    All-++-⇔ : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+    _ : 0 ∈ [ 1 , 2 , 0 , 1 ]
+    _ = there (there (here refl))
+
+    All-++-⇔ : ∀ {A : Set} {P : A → Set} (xs ys : List A)
                                     → All P (xs ++ ys) ⇔ (All P xs × All P ys)
-    All-++-⇔ xs ys = 
+    All-++-⇔ xs ys =
         record
         {
             to = to xs ys ;
             from = from xs ys
         } where
-            to : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+            to : ∀ {A : Set} {P : A → Set} (xs ys : List A)
                                     → All P (xs ++ ys) → (All P xs × All P ys)
             to [] ys all = ⟨ [] , all ⟩
             to (x ∷ xs) ys (ps ∷ all) with (to xs ys all)
@@ -498,31 +501,31 @@ module plfa.part1.Lists where
 
     -- Exercise Any-++-⇔
     Any-++-⇔ : ∀ {A : Set} {P : A → Set} (xs ys : List A) → Any P (xs ++ ys) ⇔ ((Any P xs) ⊎ (Any P ys))
-    Any-++-⇔ xs ys = 
+    Any-++-⇔ xs ys =
         record
             {
                 to = to-lem xs ys ;
                 from = from-lem xs ys
             } where
-                to-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+                to-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A)
                     → Any P (xs ++ ys) →  (Any P xs) ⊎ (Any P ys)
                 to-lem [] ys any-ys = inj₂ any-ys
                 to-lem (x ∷ xs) _ (here px) = inj₁ (here px)
                 to-lem (x ∷ xs) ys (there in-xs++ys) with to-lem xs ys in-xs++ys
                 ... | inj₁ in-xs = inj₁ (there in-xs)
                 ... | inj₂ in-ys = inj₂ in-ys
-                
-                from-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+
+                from-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A)
                     → (Any P xs) ⊎ (Any P ys) → Any P (xs ++ ys)
                 from-lem _ _ (inj₁ (here px))              = here px
                 from-lem [] ys (inj₂ in-ys)                = in-ys
                 from-lem (x ∷ xs) ys (inj₁ (there in-xs)) = there (from-lem xs ys (inj₁ in-xs))
                 from-lem (x ∷ xs) ys (inj₂ in-ys)         = there (from-lem xs ys (inj₂ in-ys))
-    
+
     -- Exercise All-++-≃
-    All-++-≃ : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+    All-++-≃ : ∀ {A : Set} {P : A → Set} (xs ys : List A)
                                     → All P (xs ++ ys) ≃ (All P xs × All P ys)
-    All-++-≃ xs ys = 
+    All-++-≃ xs ys =
         record
         {
             to = to xs ys ;
@@ -530,7 +533,7 @@ module plfa.part1.Lists where
             from∘to = from-to-lem xs ys ;
             to∘from = to-from-lem xs ys
         } where
-            to : ∀ {A : Set} {P : A → Set} (xs ys : List A) 
+            to : ∀ {A : Set} {P : A → Set} (xs ys : List A)
                                     → All P (xs ++ ys) → (All P xs × All P ys)
             to [] ys all = ⟨ [] , all ⟩
             to (x ∷ xs) ys (ps ∷ all) with (to xs ys all)
@@ -539,16 +542,16 @@ module plfa.part1.Lists where
             from : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (All P xs × All P ys) → All P (xs ++ ys)
             from [] ys ⟨ [] , all-ys ⟩ = all-ys
             from (x ∷ xs) ys ⟨ px ∷ all-xs , all-ys ⟩ = px ∷ (from xs ys ⟨ all-xs , all-ys ⟩)
-            from-to-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (ev : All P (xs ++ ys)) 
+            from-to-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (ev : All P (xs ++ ys))
                             → from xs ys (to xs ys ev) ≡ ev
             from-to-lem [] ys in-ys = refl
             from-to-lem (x ∷ xs) ys (px ∷ all) rewrite from-to-lem xs ys all = refl
 
-            to-from-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (ev : All P xs × All P ys) 
+            to-from-lem : ∀ {A : Set} {P : A → Set} (xs ys : List A) → (ev : All P xs × All P ys)
                             → to xs ys (from xs ys ev) ≡ ev
             to-from-lem [] ys ⟨ [] , all-ys ⟩ = refl
             to-from-lem (x ∷ xs) ys ⟨ px ∷ all-xs , all-ys ⟩ rewrite to-from-lem xs ys ⟨ all-xs , all-ys ⟩ = refl
-    
+
 
     -- Stretch ¬Any≃All¬
     _∘′_ : ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂} {C : Set ℓ₃}
@@ -557,8 +560,8 @@ module plfa.part1.Lists where
 
     ¬Any≃All¬ : ∀ {A : Set} (P : A → Set) (xs : List A) → (¬_ ∘′ Any P) xs ≃ All (¬_ ∘′ P) xs
 
-    
-    ¬Any≃All¬ P xs = 
+
+    ¬Any≃All¬ P xs =
         record
         {
             to = to-lem P xs ;
@@ -581,4 +584,49 @@ module plfa.part1.Lists where
             to-from-lem : ∀ {A : Set} (P : A → Set) (xs : List A) → (x : All (¬_ ∘′ P) xs) → to-lem P xs (from-lem P xs x) ≡ x
             to-from-lem P [] [] = refl
             to-from-lem P (x ∷ xs) (¬px ∷ ¬all-xs) = cong (¬px ∷_) (to-from-lem P xs ¬all-xs)
-                    
+
+    -- Material for CSE 311
+    shift : {A : Set} → List A → List A → List A
+    shift [] R = R
+    shift (x ∷ xs) R = shift xs (x ∷ R)
+
+    reverse-shift : {A : Set} → List A → List A
+    reverse-shift L = shift L []
+
+    map_f : {A : Set} → (f : A → A) → List A → List A
+    map_f f [] = []
+    map_f f (x ∷ xs) = (f x) ∷ (map_f f xs)
+
+    map-shift-distrib : ∀ {A : Set} → ∀ (f : A → A) → ∀ (L : List A) → ∀ (R : List A)
+                        → map_f f (shift L R) ≡ shift (map_f f L) (map_f f R)
+    map-shift-distrib f [] R = refl
+    map-shift-distrib f (x ∷ L') R rewrite map-shift-distrib f L' (x ∷ R) = refl
+        -- begin
+        --     map_f f (shift (x ∷ L') R)
+        --     ≡⟨⟩
+        --     map_f f (shift L' (x ∷ R))
+        --     ≡⟨ map-shift-distrib f L' (x ∷ R) ⟩
+        --     shift (map_f f L') (map_f f (x ∷ R))
+        --     ≡⟨⟩
+        --     shift (map_f f L') ((f x) ∷ map_f f R)
+        --     ≡⟨⟩
+        --     shift (map_f f (x ∷ L')) (map_f f R)
+        -- ∎
+
+    map-rev-comm : ∀ {A : Set}{f : A → A} → ∀ (L : List A)
+                   → map_f f (reverse-shift L) ≡ reverse-shift (map_f f L)
+    map-rev-comm [] = refl
+    map-rev-comm {f = f} (x ∷ L) rewrite map-shift-distrib f L [ x ] = refl
+        -- begin
+        --     map_f f (reverse-shift (x ∷ L))
+        --     ≡⟨⟩
+        --     map_f f (shift (x ∷ L) [])
+        --     ≡⟨⟩
+        --     map_f f (shift L [ x ])
+        --     ≡⟨ map-shift-distrib f L [ x ] ⟩
+        --     shift (map_f f L) (map_f f [ x ])
+        --     ≡⟨⟩
+        --     shift (map_f f (x ∷ L)) []
+        --     ≡⟨⟩
+        --     reverse-shift (map_f f (x ∷ L))
+        -- ∎
